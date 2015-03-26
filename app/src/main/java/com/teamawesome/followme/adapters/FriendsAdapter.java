@@ -59,8 +59,9 @@ public class FriendsAdapter extends ArrayAdapter<String> {
 
         return row;
     }
+
+    static class Holder{
+        TextView name;
+    }
 }
 
-class Holder{
-    TextView name;
-}
