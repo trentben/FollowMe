@@ -125,6 +125,8 @@ public class FriendsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
 
 
+
+
                     }
                });
         return builder.create();
