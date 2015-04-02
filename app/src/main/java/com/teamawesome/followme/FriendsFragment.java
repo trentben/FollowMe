@@ -1,12 +1,16 @@
 package com.teamawesome.followme;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.teamawesome.followme.adapters.FriendsAdapter;
@@ -81,6 +85,14 @@ public class FriendsFragment extends Fragment {
         FriendsAdapter adapter = new FriendsAdapter(getActivity(), R.layout.listitem_friend, list);
         mListView.setAdapter(adapter);
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                makeDialog().show();
+            }
+        });
+
+
         return view;
     }
 
@@ -104,6 +116,21 @@ public class FriendsFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+    public Dialog makeDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.pick_follow)
+              .setItems(R.array.dialog_array, new DialogInterface.OnClickListener(){
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+               });
+        return builder.create();
+
+    }
+
 
     @Override
     public void onDetach() {
