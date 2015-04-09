@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -75,7 +76,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        View view = inflater.inflate(R.layout.activity_friends, container, false);
 
         mListView = (ListView) view.findViewById(R.id.friends_listView);
         List<String> list = new ArrayList<String>();
@@ -124,7 +125,37 @@ public class FriendsFragment extends Fragment {
 
                     public void onClick(DialogInterface dialog, int which) {
 
+                        //to follow
+                        if (which == DialogInterface.BUTTON1){
 
+
+
+
+
+                            Intent i = new Intent("followme.MapsActivity");
+                            startActivity(i);
+                            dialog.dismiss();
+/*******
+
+                            FragmentInscription frag = FragmentInscription.newInstance();
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            ft.replace(R.id.MapsActivity, frag);
+                            ft.addToBackStack(null);
+                            ft.commit();
+  ******************/
+
+                        }
+                        //to lead
+                        if (which == DialogInterface.BUTTON2){
+
+
+                            Intent i = new Intent("followme.MapsActivity");
+                            startActivity(i);
+                            dialog.dismiss();
+
+                        }
+
+                        else dialog.dismiss();
 
 
                     }
@@ -132,6 +163,7 @@ public class FriendsFragment extends Fragment {
         return builder.create();
 
     }
+
 
 
     @Override
