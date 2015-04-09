@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Use the {@link MapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapsFragment extends com.google.android.gms.maps.SupportMapFragment implements LocationListener{
+public class MapsFragment extends com.google.android.gms.maps.SupportMapFragment {//implements LocationListener{
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
@@ -54,17 +54,17 @@ public class MapsFragment extends com.google.android.gms.maps.SupportMapFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mMap = getMap();
-        /*googleMap.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
+        GoogleMap googleMap = getMap();
+        googleMap.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);*/
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
     }
 
     @Override
     public void onResume(){
         super.onPause();
 
-        if(mLocationManager == null)
+       /* if(mLocationManager == null)
         {
             mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         }
@@ -79,7 +79,7 @@ public class MapsFragment extends com.google.android.gms.maps.SupportMapFragment
             mUserLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
             mMap.addMarker(new MarkerOptions().position(mUserLocation));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
-        }
+        }*/
 
 
     }
@@ -87,13 +87,13 @@ public class MapsFragment extends com.google.android.gms.maps.SupportMapFragment
     @Override
     public void onPause(){
         super.onPause();
-        mLocationManager.removeUpdates(this);
+        //mLocationManager.removeUpdates(this);
     }
 
     /*
      * Location Services Callbacks
      */
-    @Override
+   /* @Override
     public void onLocationChanged(Location location) {
         mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.addMarker(new MarkerOptions().position(mUserLocation));
@@ -113,5 +113,5 @@ public class MapsFragment extends com.google.android.gms.maps.SupportMapFragment
     @Override
     public void onProviderDisabled(String provider) {
 
-    }
+    }*/
 }
