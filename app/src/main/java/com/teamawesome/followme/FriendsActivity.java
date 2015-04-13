@@ -2,10 +2,12 @@ package com.teamawesome.followme;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,29 +48,34 @@ public class FriendsActivity extends ActionBarActivity {
     }
 
     public Dialog makeDialog(){
+
+        final Context context = this;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.pick_follow)
                 .setItems(R.array.dialog_array, new DialogInterface.OnClickListener(){
 
                     public void onClick(DialogInterface dialog, int which) {
 
+                        Log.d("Onclick - ", ""+which);
                         //to follow
-                        if (which == DialogInterface.BUTTON1){
+                        if (which == 0){
 
-                            Intent i = new Intent("followme.MapsActivity");
+                            Log.d("Onclick - Btn 1", ""+which);
+                            Intent i = new Intent(context, MapsActivity.class);
                             startActivity(i);
                             dialog.dismiss();
                         }
                         //to lead
-                        if (which == DialogInterface.BUTTON2){
+                        if (which == 1){
 
-                            Intent i = new Intent("followme.MapsActivity");
+                            Intent i = new Intent(context, MapsActivity.class);
                             startActivity(i);
                             dialog.dismiss();
 
                         }
 
-                        if (which==DialogInterface.BUTTON3) dialog.dismiss();
+                        if (which==2) dialog.dismiss();
 
 
 

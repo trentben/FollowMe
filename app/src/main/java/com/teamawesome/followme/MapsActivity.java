@@ -1,16 +1,25 @@
 package com.teamawesome.followme;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity implements LocationListener, LocationSource {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private LocationManager mLocationManager;
+    OnLocationChangedListener myLocationListener = null;
+    private LatLng mUserLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +28,60 @@ public class MapsActivity extends FragmentActivity {
         setUpMapIfNeeded();
     }
 
+
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onResume(){
+        super.onPause();
         setUpMapIfNeeded();
+
+        if(mLocationManager == null)
+        {
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        }
+        //Set update listener
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+        //get the last known Location and place a marker on the screen
+        Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if(lastKnownLocation != null)
+        {
+            mUserLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
+        }
+
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mLocationManager.removeUpdates(this);
+    }
+
+    /*
+     * Location Services Callbacks
+     */
+   @Override
+    public void onLocationChanged(Location location) {
+       if (myLocationListener != null) {
+           myLocationListener.onLocationChanged(location);
+       }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     /**
@@ -60,6 +119,20 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap.setMyLocationEnabled(true);
+        mMap.setLocationSource(this);
+    }
+
+    /*
+     * LocationSource Methods
+     */
+    @Override
+    public void activate(OnLocationChangedListener onLocationChangedListener) {
+        myLocationListener = onLocationChangedListener;
+    }
+
+    @Override
+    public void deactivate() {
+
     }
 }
