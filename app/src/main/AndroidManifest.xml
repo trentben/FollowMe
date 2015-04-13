@@ -26,11 +26,6 @@
             android:value="@string/google_maps_key" />-->
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
-
-        </activity>
-        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
         </activity>
@@ -39,7 +34,6 @@
             android:label="@string/title_activity_friends" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
