@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,9 +26,12 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
+    private CompassFragment mCompassFragment;
     private LocationManager mLocationManager;
     OnLocationChangedListener myLocationListener = null;
     private LatLng mUserLocation;
+
+    private int tempFix = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,38 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     public void onPause(){
         super.onPause();
         mLocationManager.removeUpdates(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_map, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_compass) {
+            if(tempFix == 0) {
+                closeMap();
+                showCompassFragment();
+                tempFix = 1;
+            }
+            else{
+                closeCompass();
+                showMapFragment();
+                tempFix = 0;
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void showMapFragment(){
@@ -115,6 +152,17 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
         mMap.setLocationSource(this);
+    }
+
+    public void showCompassFragment(){
+        if(mCompassFragment == null)
+            mCompassFragment = CompassFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.map_container, mCompassFragment).commit();
+    }
+
+    public void closeCompass(){
+        getSupportFragmentManager().beginTransaction().remove(mCompassFragment).commit();
     }
 
 
