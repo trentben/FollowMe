@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -34,6 +35,7 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     private String mParam2;
 
     private TextView mCompassTV;
+    private ImageView mCompassImage;
     private SensorManager mSensorManager;
 
     private OnFragmentInteractionListener mListener;
@@ -73,7 +75,7 @@ public class CompassFragment extends Fragment implements SensorEventListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
         mCompassTV = (TextView) view.findViewById(R.id.compass_tv);
-
+        mCompassImage = (ImageView) view.findViewById(R.id.compass_arrow_image_view);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         return view;
@@ -129,6 +131,7 @@ public class CompassFragment extends Fragment implements SensorEventListener {
         float degress = event.values[0];
 
         mCompassTV.setText(""+(int)degress);
+        mCompassImage.setRotation(degress);
     }
 
     @Override
