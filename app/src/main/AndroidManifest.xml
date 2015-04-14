@@ -21,9 +21,11 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <!--<meta-data
+        <!--
+            <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_key" />-->
+            android:value="@string/google_maps_key" />
+        -->
 
         <activity
             android:name=".MapsActivity"
@@ -34,6 +36,7 @@
             android:label="@string/title_activity_friends" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,8 +45,10 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyD6T5sfdwY2xvS0z2_4LRSkeA9OOH1L5oA" />
 
+        <activity
+            android:name=".StatusFriendsActivity"
+            android:label="@string/title_activity_status_friends" >
+        </activity>
     </application>
-
-
 
 </manifest>
