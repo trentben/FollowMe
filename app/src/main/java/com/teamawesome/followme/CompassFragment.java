@@ -6,6 +6,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,19 +26,25 @@ import android.widget.TextView;
  * Use the {@link CompassFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CompassFragment extends Fragment implements SensorEventListener {
+public class CompassFragment extends Fragment implements SensorEventListener, LocationListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final double DEST_LAT = 32.988934;
+    private static final double DEST_LONG = -96.771528;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private TextView mCompassTV;
+    private TextView mMetersTV;
     private ImageView mCompassImage;
     private SensorManager mSensorManager;
+    private Location mDestLocation;
+    private Location mUserLocation;
 
     private OnFragmentInteractionListener mListener;
 
@@ -76,8 +84,14 @@ public class CompassFragment extends Fragment implements SensorEventListener {
         View view = inflater.inflate(R.layout.fragment_compass, container, false);
         mCompassTV = (TextView) view.findViewById(R.id.compass_tv);
         mCompassImage = (ImageView) view.findViewById(R.id.compass_arrow_image_view);
+        mMetersTV = (TextView) view.findViewById(R.id.dist_meters_tv);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+
+        mDestLocation = new Location("");
+        mDestLocation.setLatitude(DEST_LAT);
+        mDestLocation.setLongitude(DEST_LONG);
+
         return view;
     }
 
@@ -129,13 +143,46 @@ public class CompassFragment extends Fragment implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         float degress = event.values[0];
+        float destBaring = 0;
+
+        if(mUserLocation != null)
+        {
+            int dist = (int) mUserLocation.distanceTo(mDestLocation);
+            destBaring = mUserLocation.bearingTo(mDestLocation);
+            mMetersTV.setText(dist+" m");
+        }
+
 
         mCompassTV.setText(""+(int)degress);
-        mCompassImage.setRotation(degress);
+        mCompassImage.setRotation(360-degress + destBaring);
+
+
+
+
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mUserLocation = location;
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 

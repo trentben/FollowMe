@@ -159,6 +159,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             mCompassFragment = CompassFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction().add(R.id.map_container, mCompassFragment).commit();
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mCompassFragment);
     }
 
     public void closeCompass(){
