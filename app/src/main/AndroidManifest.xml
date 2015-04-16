@@ -34,11 +34,7 @@
         <activity
             android:name=".FriendsActivity"
             android:label="@string/title_activity_friends" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
@@ -48,6 +44,11 @@
         <activity
             android:name=".StatusFriendsActivity"
             android:label="@string/title_activity_status_friends" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

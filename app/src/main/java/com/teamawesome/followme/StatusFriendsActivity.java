@@ -41,7 +41,7 @@ public class StatusFriendsActivity extends ActionBarActivity {
 
 
     // TODO: Rename and change types of parameters
-    
+
 
     private StatusFragment.OnFragmentInteractionListener mListener;
     /**

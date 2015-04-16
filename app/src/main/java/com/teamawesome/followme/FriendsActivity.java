@@ -28,7 +28,7 @@ public class FriendsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
+        setContentView(R.layout.fragment_friends);
 
 
         mListView = (ListView) findViewById(R.id.friends_listView);
