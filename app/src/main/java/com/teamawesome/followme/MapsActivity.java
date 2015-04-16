@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends ActionBarActivity implements LocationListener, LocationSource {
 
     private static final String MAP_FRAGMENT_TAG = "map";
+    private static final String COMPASS_FRAGMENT_TAG = "compass";
+    private static final String CAMERA_FRAGMENT_TAG = "camera";
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
@@ -38,14 +40,12 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        showMapFragment();
     }
 
 
     @Override
     public void onResume(){
         super.onPause();
-        setUpMapIfNeeded();
 
         if(mLocationManager == null)
         {
@@ -54,14 +54,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         //Set update listener
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        //get the last known Location and place a marker on the screen
-        Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        if(lastKnownLocation != null)
-        {
-            mUserLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
-        }
+        showFragment(MAP_FRAGMENT_TAG);
 
 
     }
@@ -89,19 +82,24 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_compass) {
             if(tempFix == 0) {
-                closeMap();
-                showCompassFragment();
+                showFragment(COMPASS_FRAGMENT_TAG);
                 tempFix = 1;
             }
             else{
-                closeCompass();
-                showMapFragment();
-                tempFix = 0;
+               showFragment(MAP_FRAGMENT_TAG);
             }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showCompassFragment(){
+        if(mCompassFragment == null)
+            mCompassFragment = CompassFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.map_container, mCompassFragment).commit();
+        mCompassFragment.setLocationSource(this);
     }
 
     public void showMapFragment(){
@@ -122,18 +120,14 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             mMapFragment = SupportMapFragment.newInstance(options);
             // Then we add it using a FragmentTransaction.
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.map_container, mMapFragment, MAP_FRAGMENT_TAG);
+            fragmentTransaction.replace(R.id.map_container, mMapFragment, MAP_FRAGMENT_TAG);
             fragmentTransaction.commit();
         }
 
         setUpMapIfNeeded();
     }
 
-    private void closeMap() {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(mMapFragment);
-        fragmentTransaction.commit();
-    }
+
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the
@@ -147,25 +141,31 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             }
         }
     }
-
-
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
         mMap.setLocationSource(this);
+
+        //get the last known Location and place a marker on the screen
+        Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if(lastKnownLocation != null)
+        {
+            mUserLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
+        }
     }
 
-    public void showCompassFragment(){
-        if(mCompassFragment == null)
-            mCompassFragment = CompassFragment.newInstance();
-
-        getSupportFragmentManager().beginTransaction().add(R.id.map_container, mCompassFragment).commit();
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mCompassFragment);
+    public void showFragment(String showFragment){
+        switch(showFragment){
+            case MAP_FRAGMENT_TAG:
+                showMapFragment();
+                setUpMapIfNeeded();
+                break;
+            case COMPASS_FRAGMENT_TAG:
+                showCompassFragment();
+                break;
+        }
     }
-
-    public void closeCompass(){
-        getSupportFragmentManager().beginTransaction().remove(mCompassFragment).commit();
-    }
-
 
     /*
      * Location Services Callbacks

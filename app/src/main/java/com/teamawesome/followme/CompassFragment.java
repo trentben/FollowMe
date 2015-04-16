@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.LocationSource;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,17 +28,17 @@ import android.widget.TextView;
  * Use the {@link CompassFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CompassFragment extends Fragment implements SensorEventListener, LocationListener {
+public class CompassFragment extends Fragment implements SensorEventListener, LocationSource.OnLocationChangedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_LOCATION_SOURCE = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private static final double DEST_LAT = 32.988934;
     private static final double DEST_LONG = -96.771528;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private LocationSource mLocationSource;
     private String mParam2;
 
     private TextView mCompassTV;
@@ -103,6 +105,8 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
         // for the system's orientation sensor registered listeners
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
 
+        mMetersTV.setText(R.string.waiting_for_gps);
+
     }
 
     @Override
@@ -137,8 +141,15 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
         mListener = null;
     }
 
+    public void setLocationSource(LocationSource ls)
+    {
+        mLocationSource = ls;
+        mLocationSource.activate(this);
+    }
+
+
     /*
-     * Compass callbacks
+     * Compass Methods
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -166,24 +177,12 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
 
     }
 
+    /*
+     * Location Methods
+     */
     @Override
     public void onLocationChanged(Location location) {
         mUserLocation = location;
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 
 
