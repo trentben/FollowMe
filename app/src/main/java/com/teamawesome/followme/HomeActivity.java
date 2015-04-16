@@ -1,33 +1,23 @@
 package com.teamawesome.followme;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.teamawesome.followme.adapters.FriendsAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 
-public class StatusFriendsActivity extends ActionBarActivity {
+public class HomeActivity extends ActionBarActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -39,20 +29,15 @@ public class StatusFriendsActivity extends ActionBarActivity {
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
 
-
-    // TODO: Rename and change types of parameters
-
-
-    private StatusFragment.OnFragmentInteractionListener mListener;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    private ListView mListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_status_friends);
+        setContentView(R.layout.activity_home);
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -63,71 +48,52 @@ public class StatusFriendsActivity extends ActionBarActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        final ActionBar actionBar = getSupportActionBar();
 
+        // Specify that tabs should be displayed in the action bar.
+        if(actionBar != null)
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        mListView = (ListView) findViewById(R.id.friends_listView);
-        List<String> list = new ArrayList<String>();
-        list.add("Android Jones");
-        list.add("Kevin Bacon");
-        list.add("Jonny Appleseed");
-        FriendsAdapter adapter = new FriendsAdapter(this, R.layout.listitem_friend, list);
-        mListView.setAdapter(adapter);
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                makeDialog().show();
+                if (tab.getText().toString().equalsIgnoreCase(getResources().getString(R.string.title_section1)))
+                {
+                    mViewPager.setCurrentItem(0);
+                }
+                else
+                {
+                    mViewPager.setCurrentItem(1);
+                }
+
             }
-        });
-    }
 
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
 
-    public Dialog makeDialog(){
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
 
-        final Context context = this;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.pick_follow)
-                .setItems(R.array.dialog_array, new DialogInterface.OnClickListener(){
-
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Log.d("Onclick - ", "" + which);
-                        //to follow
-                        if (which == 0){
-
-                            Log.d("Onclick - Btn 1", ""+which);
-                            Intent i = new Intent(context, MapsActivity.class);
-                            startActivity(i);
-                            dialog.dismiss();
-                        }
-                        //to lead
-                        if (which == 1){
-
-                            Intent i = new Intent(context, MapsActivity.class);
-                            startActivity(i);
-                            dialog.dismiss();
-
-                        }
-                        //cancel
-                        if (which==2) dialog.dismiss();
-
-
-
-
-
-                    }
-                });
-        return builder.create();
+        // Add 3 tabs, specifying the tab's text and TabListener
+        for (int i = 0; i < 2; i++) {
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setText("Tab " + (i + 1))
+                            .setTabListener(tabListener));
+        }
 
     }
-
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_status_friends, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -167,7 +133,7 @@ public class StatusFriendsActivity extends ActionBarActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
@@ -178,8 +144,7 @@ public class StatusFriendsActivity extends ActionBarActivity {
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
+
             }
             return null;
         }
@@ -213,7 +178,7 @@ public class StatusFriendsActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_status_friends, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
             return rootView;
         }
     }

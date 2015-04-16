@@ -20,9 +20,10 @@
     <string name="title_activity_friends">FollowMe</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_status_friends">StatusFriendsActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Friends List</string>
+    <string name="title_section2">Status</string>
+
     <string name="waiting_for_gps">Waiting for GPS</string>
+    <string name="title_activity_home">HomeActivity</string>
 
 </resources>

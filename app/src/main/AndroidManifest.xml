@@ -42,8 +42,8 @@
             android:value="AIzaSyD6T5sfdwY2xvS0z2_4LRSkeA9OOH1L5oA" />
 
         <activity
-            android:name=".StatusFriendsActivity"
-            android:label="@string/title_activity_status_friends" >
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
