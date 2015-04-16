@@ -25,13 +25,16 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private static final String MAP_FRAGMENT_TAG = "map";
     private static final String COMPASS_FRAGMENT_TAG = "compass";
     private static final String CAMERA_FRAGMENT_TAG = "camera";
+    private static final String SAVED_FRAGMENT_STATE = "saved frag state";
 
+    private String mCurrentFragment;
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
     private CompassFragment mCompassFragment;
     private LocationManager mLocationManager;
     OnLocationChangedListener myLocationListener = null;
     private LatLng mUserLocation;
+
 
     private int tempFix = 0;
 
@@ -40,6 +43,15 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        if(savedInstanceState != null)
+        {
+            String frag = savedInstanceState.getString(SAVED_FRAGMENT_STATE);
+            showFragment(frag);
+        }
+        else
+        {
+            showFragment(MAP_FRAGMENT_TAG);
+        }
     }
 
 
@@ -53,8 +65,6 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         }
         //Set update listener
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
-        showFragment(MAP_FRAGMENT_TAG);
 
 
     }
@@ -80,15 +90,16 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_compass) {
-            if(tempFix == 0) {
+        switch (id) {
+            case R.id.action_map:
+                showFragment(MAP_FRAGMENT_TAG);
+                return true;
+            case R.id.action_compass:
                 showFragment(COMPASS_FRAGMENT_TAG);
-                tempFix = 1;
-            }
-            else{
-               showFragment(MAP_FRAGMENT_TAG);
-            }
-            return true;
+                return true;
+            case R.id.action_camera:
+                showFragment(CAMERA_FRAGMENT_TAG);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -105,8 +116,8 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     public void showMapFragment(){
         // Creates initial configuration for the map
         GoogleMapOptions options = new GoogleMapOptions().camera(CameraPosition.fromLatLngZoom(new LatLng(37.4005502611301, -5.98233461380005), 16))
-                .compassEnabled(false).mapType(GoogleMap.MAP_TYPE_NORMAL).rotateGesturesEnabled(false).scrollGesturesEnabled(false).tiltGesturesEnabled(false)
-                .zoomControlsEnabled(false).zoomGesturesEnabled(false);
+                .compassEnabled(false).mapType(GoogleMap.MAP_TYPE_NORMAL).rotateGesturesEnabled(true).scrollGesturesEnabled(true).tiltGesturesEnabled(false)
+                .zoomControlsEnabled(true).zoomGesturesEnabled(true);
 
         // Modified from the sample code:
         // It isn't possible to set a fragment's id programmatically so we set a
@@ -165,6 +176,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
                 showCompassFragment();
                 break;
         }
+        mCurrentFragment = showFragment;
     }
 
     /*
@@ -205,7 +217,11 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        savedInstanceState.putString(SAVED_FRAGMENT_STATE, mCurrentFragment);
 
-
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
 }
