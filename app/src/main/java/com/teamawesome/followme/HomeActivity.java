@@ -61,11 +61,11 @@ public class HomeActivity extends ActionBarActivity {
 
                 if (tab.getText().toString().equalsIgnoreCase(getResources().getString(R.string.title_section1)))
                 {
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(1);
                 }
                 else
                 {
-                    mViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(0);
                 }
 
             }
@@ -80,12 +80,8 @@ public class HomeActivity extends ActionBarActivity {
         };
 
         // Add 3 tabs, specifying the tab's text and TabListener
-        for (int i = 0; i < 2; i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText("Tab " + (i + 1))
-                            .setTabListener(tabListener));
-        }
+        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_section1)).setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_section2)).setTabListener(tabListener));
 
     }
 
@@ -125,9 +121,9 @@ public class HomeActivity extends ActionBarActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            if(position == 0)
+                return StatusFragment.newInstance();
+            return FriendsFragment.newInstance();
         }
 
         @Override
@@ -140,9 +136,9 @@ public class HomeActivity extends ActionBarActivity {
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
+                    return getString(R.string.title_section1).toUpperCase(l);
+                case 0:
                     return getString(R.string.title_section2).toUpperCase(l);
 
             }
