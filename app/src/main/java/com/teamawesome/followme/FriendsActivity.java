@@ -48,7 +48,6 @@ public class FriendsActivity extends ActionBarActivity {
     }
     //Dialog box that pops up when you select a friend on the friendsactivity
     public Dialog makeDialog(){
-
         final Context context = this;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -76,10 +75,6 @@ public class FriendsActivity extends ActionBarActivity {
                         }
                         //cancel
                         if (which==2) dialog.dismiss();
-
-
-
-
 
                     }
                 });

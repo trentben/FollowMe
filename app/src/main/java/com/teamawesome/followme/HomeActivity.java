@@ -39,6 +39,7 @@ public class HomeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        final ActionBar actionBar = getSupportActionBar();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -47,11 +48,17 @@ public class HomeActivity extends ActionBarActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position)
+            {
+                actionBar.setSelectedNavigationItem(position);
+            }
+        });
 
-        final ActionBar actionBar = getSupportActionBar();
+
 
         // Specify that tabs should be displayed in the action bar.
-        if(actionBar != null)
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create a tab listener that is called when the user changes tabs.
@@ -59,13 +66,13 @@ public class HomeActivity extends ActionBarActivity {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 // show the given tab
 
-                if (tab.getText().toString().equalsIgnoreCase(getResources().getString(R.string.title_section1)))
+                if (tab.getText().toString().equalsIgnoreCase(getResources().getString(R.string.title_status)))
                 {
-                    mViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(0);
                 }
                 else
                 {
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(1);
                 }
 
             }
@@ -79,9 +86,9 @@ public class HomeActivity extends ActionBarActivity {
             }
         };
 
-        // Add 3 tabs, specifying the tab's text and TabListener
-        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_section1)).setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_section2)).setTabListener(tabListener));
+        // Add 2 tabs, specifying the tab's text and TabListener
+        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_status)).setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText(getResources().getString(R.string.title_friends)).setTabListener(tabListener));
 
     }
 
@@ -136,10 +143,10 @@ public class HomeActivity extends ActionBarActivity {
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 1:
-                    return getString(R.string.title_section1).toUpperCase(l);
                 case 0:
-                    return getString(R.string.title_section2).toUpperCase(l);
+                    return getString(R.string.title_status).toUpperCase(l);
+                case 1:
+                    return getString(R.string.title_friends).toUpperCase(l);
 
             }
             return null;

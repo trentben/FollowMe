@@ -1,12 +1,25 @@
 package com.teamawesome.followme;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.teamawesome.followme.adapters.FriendsAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -26,6 +39,7 @@ public class FriendsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ListView mListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,7 +76,24 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friend, container, false);
+        View view = inflater.inflate(R.layout.fragment_friends, container, false);
+
+        mListView = (ListView) view.findViewById(R.id.friends_listView);
+        List<String> list = new ArrayList<String>();
+        list.add("Android Jones");
+        list.add("Kevin Bacon");
+        list.add("Jonny Appleseed");
+        FriendsAdapter adapter = new FriendsAdapter(getActivity(), R.layout.listitem_friend, list);
+        mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                makeDialog().show();
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -88,6 +119,44 @@ public class FriendsFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    //Dialog box that pops up when you select a friend on the friendsactivity
+    public Dialog makeDialog(){
+        final Context context = this.getActivity();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.pick_follow)
+                .setItems(R.array.dialog_array, new DialogInterface.OnClickListener(){
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Log.d("Onclick - ", "" + which);
+                        //to follow
+                        if (which == 0){
+
+                            Log.d("Onclick - Btn 1", ""+which);
+                            Intent i = new Intent(context, MapsActivity.class);
+                            startActivity(i);
+                            dialog.dismiss();
+                        }
+                        //to lead
+                        if (which == 1){
+
+                            Intent i = new Intent(context, MapsActivity.class);
+                            startActivity(i);
+                            dialog.dismiss();
+
+                        }
+                        //cancel
+                        if (which==2) dialog.dismiss();
+
+                    }
+                });
+        return builder.create();
+
+    }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
