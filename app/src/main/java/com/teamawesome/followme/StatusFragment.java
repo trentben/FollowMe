@@ -24,6 +24,7 @@ public class StatusFragment extends Fragment {
 
     private ImageView mBroadcastImage;
     private Button mBroadcastBtn;
+    private boolean isBroadcasting;
 
     /**
      * Use this factory method to create a new instance of
@@ -58,7 +59,14 @@ public class StatusFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         mBroadcastImage = (ImageView) view.findViewById(R.id.broadcast_image);
         mBroadcastBtn = (Button) view.findViewById(R.id.broadcast_button);
+        mBroadcastBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBroadcastClicked();
+            }
+        });
 
+        isBroadcasting = false;
 
         return view;
     }
@@ -69,6 +77,20 @@ public class StatusFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+    public void onBroadcastClicked(){
+        isBroadcasting = !isBroadcasting;
+
+        if(isBroadcasting)
+        {
+            mBroadcastImage.setImageResource(R.drawable.broadcast_active);
+        }
+        else{
+            mBroadcastImage.setImageResource(R.drawable.broadcast_deactive);
+        }
+    }
+
+
 
     @Override
     public void onAttach(Activity activity) {

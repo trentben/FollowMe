@@ -31,6 +31,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
     private CompassFragment mCompassFragment;
+    private CameraFragment mCameraFragment;
     private LocationManager mLocationManager;
     OnLocationChangedListener myLocationListener = null;
     private LatLng mUserLocation;
@@ -113,6 +114,14 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         mCompassFragment.setLocationSource(this);
     }
 
+    public void showCameraFragment(){
+        if(mCameraFragment == null)
+            mCameraFragment = CameraFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.map_container, mCameraFragment).commit();
+        //mCameraFragment.setLocationSource(this);
+    }
+
     public void showMapFragment(){
         // Creates initial configuration for the map
         GoogleMapOptions options = new GoogleMapOptions().camera(CameraPosition.fromLatLngZoom(new LatLng(37.4005502611301, -5.98233461380005), 16))
@@ -175,6 +184,8 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             case COMPASS_FRAGMENT_TAG:
                 showCompassFragment();
                 break;
+            case CAMERA_FRAGMENT_TAG:
+                showCameraFragment();
         }
         mCurrentFragment = showFragment;
     }
