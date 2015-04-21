@@ -24,5 +24,6 @@
 
     <string name="waiting_for_gps">Waiting for GPS</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="start_broadcasting">Broadcast Location</string>
 
 </resources>
