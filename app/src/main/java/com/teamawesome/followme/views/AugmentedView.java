@@ -97,8 +97,7 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
 
         int x = (int)(360 - mCompassBarring + 0 + (DEG_WIDTH/2)) % 360;
 
-        Log.d("COM", ""+x);
-
+        
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         canvas.drawCircle(x*degX, h/2, 40f, mRedPaint);
 
