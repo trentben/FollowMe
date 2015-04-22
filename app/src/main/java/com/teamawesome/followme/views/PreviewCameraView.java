@@ -1,6 +1,9 @@
 package com.teamawesome.followme.views;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -11,12 +14,12 @@ import java.io.IOException;
 /**
  * Created by Trent on 4/21/15.
  */
-public class AugmentedCamera extends SurfaceView implements SurfaceHolder.Callback{
+public class PreviewCameraView extends SurfaceView implements SurfaceHolder.Callback{
 
     private SurfaceHolder mHolder;
     public Camera mCamera;
 
-    public AugmentedCamera(Context context, Camera camera) {
+    public PreviewCameraView(Context context, Camera camera) {
         super(context);
         mCamera = camera;
 
@@ -25,6 +28,7 @@ public class AugmentedCamera extends SurfaceView implements SurfaceHolder.Callba
 
         //Req for 3.0 and below
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
 
     }
 
@@ -55,6 +59,7 @@ public class AugmentedCamera extends SurfaceView implements SurfaceHolder.Callba
 
         // set preview size and make any resize, rotate or
         // reformatting changes here
+        mCamera.setDisplayOrientation(90);
 
         // start preview with new settings
         try {
@@ -64,6 +69,8 @@ public class AugmentedCamera extends SurfaceView implements SurfaceHolder.Callba
         } catch (Exception e){
             Log.d("CAMERA", "Error starting camera preview: " + e.getMessage());
         }
+
+
     }
 
     @Override

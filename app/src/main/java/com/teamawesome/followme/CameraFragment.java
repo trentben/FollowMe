@@ -2,7 +2,6 @@ package com.teamawesome.followme;
 
 import android.app.Activity;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,26 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.teamawesome.followme.views.AugmentedCamera;
+import com.teamawesome.followme.views.PreviewCameraView;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CameraFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CameraFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class CameraFragment extends Fragment {
-
-    private OnFragmentInteractionListener mListener;
 
     // Native camera.
     private Camera mCamera;
 
     // View to display the camera output.
-    private AugmentedCamera mPreview;
+    private PreviewCameraView mPreview;
 
     // Reference to the containing view.
     private View mCameraView;
@@ -62,13 +55,6 @@ public class CameraFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     /**
      * Recommended "safe" way to open the camera.
      * @param view
@@ -82,13 +68,30 @@ public class CameraFragment extends Fragment {
         qOpened = (mCamera != null);
 
         if(qOpened == true){
-            mPreview = new AugmentedCamera(getActivity().getBaseContext(), mCamera);
-            FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_preview);
+            mPreview = new PreviewCameraView(getActivity().getBaseContext(), mCamera);
+            FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_frame);
             preview.addView(mPreview);
             //mPreview.startCameraPreview();
         }
         return qOpened;
     }
+
+    /**
+     * Clear any existing preview / camera.
+     */
+    private void releaseCameraAndPreview() {
+
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+        if(mPreview != null){
+            mPreview.destroyDrawingCache();
+            mPreview.mCamera = null;
+        }
+    }
+
     /**
      * Safe method for getting a camera instance.
      * @return
@@ -115,21 +118,6 @@ public class CameraFragment extends Fragment {
         releaseCameraAndPreview();
     }
 
-    /**
-     * Clear any existing preview / camera.
-     */
-    private void releaseCameraAndPreview() {
-
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-        if(mPreview != null){
-            mPreview.destroyDrawingCache();
-            mPreview.mCamera = null;
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -145,24 +133,8 @@ public class CameraFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+
     }
 
-    //private boolean
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
 
 }

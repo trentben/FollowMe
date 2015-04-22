@@ -51,7 +51,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         }
         else
         {
-            showFragment(MAP_FRAGMENT_TAG);
+            showFragment(COMPASS_FRAGMENT_TAG);
         }
     }
 
