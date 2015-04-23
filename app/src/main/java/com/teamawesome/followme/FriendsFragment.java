@@ -86,7 +86,7 @@ public class FriendsFragment extends Fragment {
         //In the future friends will be retrived from SQL server
         mFriendsList.add(new Friend("Android Jones", 32.988934, -96.771528));
         mFriendsList.add(new Friend("Kevin Bacon", 32.987273, -96.748304));
-        mFriendsList.add(new Friend("Jonny Appleseed", 32.989456, -96.750777));
+        mFriendsList.add(new Friend("Sammy Appleseed", 32.989456, -96.750777));
         FriendsAdapter adapter = new FriendsAdapter(getActivity(), R.layout.listitem_friend, mFriendsList);
         mListView.setAdapter(adapter);
 
