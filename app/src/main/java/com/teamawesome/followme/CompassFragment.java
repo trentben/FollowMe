@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.LocationSource;
+import com.teamawesome.followme.util.Friend;
 
 
 /**
@@ -47,6 +48,7 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
     private SensorManager mSensorManager;
     private Location mDestLocation;
     private Location mUserLocation;
+    private Friend mFriend;
 
     private OnFragmentInteractionListener mListener;
 
@@ -115,7 +117,9 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
         mSensorManager.unregisterListener(this);
     }
 
-
+    public void setFriend(Friend friend){
+        mFriend = friend;
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

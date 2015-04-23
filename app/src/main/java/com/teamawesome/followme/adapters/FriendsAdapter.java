@@ -9,18 +9,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.teamawesome.followme.R;
+import com.teamawesome.followme.util.Friend;
 
 import java.util.List;
 
 /**
  * Created by Trent Bennett on 3/24/2015.
  */
-public class FriendsAdapter extends ArrayAdapter<String> {
+public class FriendsAdapter extends ArrayAdapter<Friend> {
     private Context mContext;
     private int mLayoutResId;
     private List mList;
 
-    public FriendsAdapter(Context context, int resource, List<String> objects) {
+    public FriendsAdapter(Context context, int resource, List<Friend> objects) {
         super(context, resource, objects);
         mContext = context;
         mList = objects;

@@ -17,9 +17,12 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.teamawesome.followme.util.Friend;
 
 public class MapsActivity extends ActionBarActivity implements LocationListener, LocationSource {
 
+    public static final String FRIEND = "friend";
     private static final String MAP_FRAGMENT_TAG = "map";
     private static final String COMPASS_FRAGMENT_TAG = "compass";
     private static final String CAMERA_FRAGMENT_TAG = "camera";
@@ -32,6 +35,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private CameraFragment mCameraFragment;
     private LocationManager mLocationManager;
     OnLocationChangedListener myLocationListener = null;
+    private Friend mFriend;
     private LatLng mUserLocation;
 
 
@@ -41,6 +45,10 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        Bundle fromIntent = this.getIntent().getExtras();
+
+        mFriend = (Friend) fromIntent.getSerializable(FRIEND);
 
         if(savedInstanceState != null)
         {
@@ -169,8 +177,11 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         if(lastKnownLocation != null)
         {
             mUserLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
         }
+
+        //Place a Marker where Friend is
+        mMap.addMarker(new MarkerOptions().position(new LatLng(mFriend.latitude, mFriend.longitude)));
     }
 
     public void showFragment(String showFragment){

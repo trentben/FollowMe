@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.teamawesome.followme.adapters.FriendsAdapter;
+import com.teamawesome.followme.util.Friend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class FriendsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private ListView mListView;
+    private List<Friend> mFriendsList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,18 +81,25 @@ public class FriendsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
         //list of hardcoded friends
         mListView = (ListView) view.findViewById(R.id.friends_listView);
-        List<String> list = new ArrayList<String>();
-        list.add("Android Jones");
-        list.add("Kevin Bacon");
-        list.add("Jonny Appleseed");
-        FriendsAdapter adapter = new FriendsAdapter(getActivity(), R.layout.listitem_friend, list);
+        mFriendsList = new ArrayList<>();
+
+        //In the future friends will be retrived from SQL server
+        mFriendsList.add(new Friend("Android Jones", 32.988934, -96.771528));
+        mFriendsList.add(new Friend("Kevin Bacon", 32.987273, -96.748304));
+        mFriendsList.add(new Friend("Jonny Appleseed", 32.989456, -96.750777));
+        FriendsAdapter adapter = new FriendsAdapter(getActivity(), R.layout.listitem_friend, mFriendsList);
         mListView.setAdapter(adapter);
+
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //calls Dialog
-                makeDialog().show();
+                //makeDialog().show();
+                Intent i = new Intent(getActivity(), MapsActivity.class);
+                i.putExtra(MapsActivity.FRIEND, mFriendsList.get(position));
+                startActivity(i);
+
             }
         });
 
