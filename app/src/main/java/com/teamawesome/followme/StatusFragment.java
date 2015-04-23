@@ -1,9 +1,14 @@
 package com.teamawesome.followme;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,13 +89,35 @@ public class StatusFragment extends Fragment {
         if(isBroadcasting)
         {
             mBroadcastImage.setImageResource(R.drawable.broadcast_active);
+            createNotification();
+
         }
         else{
             mBroadcastImage.setImageResource(R.drawable.broadcast_deactive);
+
         }
     }
 
+    public void createNotification() {
+        //when notification is clicked it takes user to HomeActivity
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
 
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity());
+        builder.setSmallIcon(R.drawable.broadcast_active);
+        builder.setContentIntent(pIntent);
+        builder.setAutoCancel(true);
+        builder.setContentTitle("FollowMe");
+        builder.setContentText("You are broadcasting your location");
+        builder.setSubText("Click to open FollowMe");
+        int miD=001;
+
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(miD, builder.build());
+    }
 
     @Override
     public void onAttach(Activity activity) {
