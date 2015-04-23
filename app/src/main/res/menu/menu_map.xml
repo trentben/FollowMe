@@ -3,13 +3,16 @@
     xmlns:followme="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_map"
         android:title="Map"
-        followme:showAsAction="ifRoom" />
+        followme:showAsAction="always"
+        android:icon="@drawable/ic_action_map"/>
 
     <item android:id="@+id/action_compass"
-        android:title="Comp"
-        followme:showAsAction="ifRoom" />
+        android:title="Compass"
+        followme:showAsAction="always"
+        android:icon="@drawable/ic_action_compass"/>
 
     <item android:id="@+id/action_camera"
-        android:title="Cam"
-        followme:showAsAction="ifRoom" />
+        android:title="Camera"
+        followme:showAsAction="always"
+        android:icon="@drawable/ic_action_camera"/>
 </menu>
