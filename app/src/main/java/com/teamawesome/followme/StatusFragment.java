@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 
 /**
@@ -18,16 +20,11 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class StatusFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
+
+    private ImageView mBroadcastImage;
+    private Button mBroadcastBtn;
+    private boolean isBroadcasting;
 
     /**
      * Use this factory method to create a new instance of
@@ -38,10 +35,7 @@ public class StatusFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static StatusFragment newInstance() {
         StatusFragment fragment = new StatusFragment();
-        /*Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
+
         return fragment;
     }
 
@@ -63,7 +57,16 @@ public class StatusFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_status, container, false);
+        mBroadcastImage = (ImageView) view.findViewById(R.id.broadcast_image);
+        mBroadcastBtn = (Button) view.findViewById(R.id.broadcast_button);
+        mBroadcastBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBroadcastClicked();
+            }
+        });
 
+        isBroadcasting = false;
 
         return view;
     }
@@ -74,6 +77,20 @@ public class StatusFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+    public void onBroadcastClicked(){
+        isBroadcasting = !isBroadcasting;
+
+        if(isBroadcasting)
+        {
+            mBroadcastImage.setImageResource(R.drawable.broadcast_active);
+        }
+        else{
+            mBroadcastImage.setImageResource(R.drawable.broadcast_deactive);
+        }
+    }
+
+
 
     @Override
     public void onAttach(Activity activity) {

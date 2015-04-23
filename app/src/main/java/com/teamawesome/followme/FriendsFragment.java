@@ -77,7 +77,7 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
-
+        //list of hardcoded friends
         mListView = (ListView) view.findViewById(R.id.friends_listView);
         List<String> list = new ArrayList<String>();
         list.add("Android Jones");
@@ -89,6 +89,7 @@ public class FriendsFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //calls Dialog
                 makeDialog().show();
             }
         });
@@ -120,7 +121,7 @@ public class FriendsFragment extends Fragment {
         mListener = null;
     }
 
-    //Dialog box that pops up when you select a friend on the friendsactivity
+    //Dialog box that pops up when you select a friend on the friendsfragment
     public Dialog makeDialog(){
         final Context context = this.getActivity();
 

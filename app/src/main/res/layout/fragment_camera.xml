@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="com.teamawesome.followme.CameraFragment"
+    android:id="@+id/camera_frame">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <view
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        class="com.teamawesome.followme.views.AugmentedView"
+        android:id="@+id/augmented_view"
+        android:layout_gravity="center_horizontal|bottom" />
+
+</FrameLayout>

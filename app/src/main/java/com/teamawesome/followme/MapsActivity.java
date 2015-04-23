@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -18,7 +17,6 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends ActionBarActivity implements LocationListener, LocationSource {
 
@@ -31,6 +29,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
     private CompassFragment mCompassFragment;
+    private CameraFragment mCameraFragment;
     private LocationManager mLocationManager;
     OnLocationChangedListener myLocationListener = null;
     private LatLng mUserLocation;
@@ -50,7 +49,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         }
         else
         {
-            showFragment(MAP_FRAGMENT_TAG);
+            showFragment(COMPASS_FRAGMENT_TAG);
         }
     }
 
@@ -111,6 +110,14 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
 
         getSupportFragmentManager().beginTransaction().replace(R.id.map_container, mCompassFragment).commit();
         mCompassFragment.setLocationSource(this);
+    }
+
+    public void showCameraFragment(){
+        if(mCameraFragment == null)
+            mCameraFragment = CameraFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.map_container, mCameraFragment).commit();
+        //mCameraFragment.setLocationSource(this);
     }
 
     public void showMapFragment(){
@@ -175,6 +182,8 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             case COMPASS_FRAGMENT_TAG:
                 showCompassFragment();
                 break;
+            case CAMERA_FRAGMENT_TAG:
+                showCameraFragment();
         }
         mCurrentFragment = showFragment;
     }

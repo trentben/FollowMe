@@ -23,6 +23,7 @@
     <string name="title_status">Status</string>
 
     <string name="waiting_for_gps">Waiting for GPS</string>
-    <string name="title_activity_home">Follow Me</string>
+    <string name="title_activity_home">FollowMe</string>
+    <string name="start_broadcasting">Broadcast Location</string>
 
 </resources>
