@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +21,21 @@ import android.widget.ListView;
 import com.teamawesome.followme.adapters.FriendsAdapter;
 import com.teamawesome.followme.util.Friend;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 /**
@@ -103,6 +118,9 @@ public class FriendsFragment extends Fragment {
             }
         });
 
+        DownloadFriendsData downloadFriendsData = new DownloadFriendsData(getActivity());
+        downloadFriendsData.execute("http://192.168.1.124:8888/sample1/getusers.php?user=1&format=json");
+
         return view;
     }
 
@@ -181,6 +199,183 @@ public class FriendsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+
+    private class DownloadFriendsData extends AsyncTask<String, Integer, String> {
+
+        private Context context;
+        private PowerManager.WakeLock mWakeLock;
+
+
+        public DownloadFriendsData(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... sUrls) {
+            String sUrl = sUrls[0];
+            String fileName = "friends.json";
+
+            //Download JSON file
+            File outputFile = downloadHelper(sUrl);
+
+            //If the outputFile returned is null, then we'll check the cache for a previous version
+            if(outputFile == null)
+            {
+                File casheFile = new File(context.getCacheDir().getAbsolutePath() + File.separator + fileName);
+
+                if(!casheFile.exists())
+                    return "Could not get JSON file";
+
+                outputFile = casheFile;
+            }
+
+            //Parse JSON Data
+            try {
+                mFriendsList = new ArrayList<>();
+
+                Scanner jsonInput = new Scanner(outputFile);
+                StringBuilder sBuilder = new StringBuilder();
+
+                while(jsonInput.hasNextLine())
+                    sBuilder.append(jsonInput.nextLine());
+
+                String jsonStr = sBuilder.toString();
+
+                JSONObject jsonObj = new JSONObject(jsonStr);
+
+                JSONArray posts = jsonObj.getJSONArray("posts");
+
+                for(int i=0; i < posts.length(); i++)
+                {
+                    JSONObject s = posts.getJSONObject(i);
+                    JSONObject p = s.getJSONObject("post");
+
+
+                    Friend friend = new Friend("");
+
+                    friend.username = p.getString("username");
+                    friend.latitude = p.getDouble("latitude");
+                    friend.longitude = p.getDouble("longitude");
+
+                    //downloadHelper(store.storeLogoURL);
+
+                    mFriendsList.add(friend);
+
+                }
+
+
+            } catch (FileNotFoundException | JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // take CPU lock to prevent CPU from going off if the user
+            // presses the power button during download
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    getClass().getName());
+            mWakeLock.acquire();
+           // mProgressDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            // if we get here, length is known, now set indeterminate to false
+            /*mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setMax(100);
+            mProgressDialog.setProgress(progress[0]);*/
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mWakeLock.release();
+            //mProgressDialog.dismiss();
+            if (result != null) {
+                //mListener.onStoreListFragInteraction(StoreListFragment.MSG_DOWNLOAD_FAILED);
+            }
+            else {
+                FriendsAdapter adapter = new FriendsAdapter(getActivity(), R.layout.listitem_friend, mFriendsList);
+                mListView.setAdapter(adapter);
+            }
+        }
+
+
+        private File downloadHelper(String sUrl)
+        {
+            InputStream input = null;
+            OutputStream output = null;
+            HttpURLConnection connection = null;
+            String fileName = "friends.json";
+            File outputFile = new File(context.getCacheDir().getAbsolutePath() + File.separator + fileName);
+            try {
+                URL url = new URL(sUrl);
+                connection = (HttpURLConnection) url.openConnection();
+
+                //Set the connection timeout to 5 sec
+                connection.setConnectTimeout(5000);
+                connection.connect();
+
+                // expect HTTP 200 OK, so we don't mistakenly save error report
+                // instead of the file
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.e("DOWNLOAD", "Server returned HTTP " + connection.getResponseCode()
+                            + " " + connection.getResponseMessage());
+                    return null;
+                }
+
+                // this will be useful to display download percentage
+                // might be -1: server did not report the length
+                int fileLength = connection.getContentLength();
+
+
+                // download the file
+                input = connection.getInputStream();
+                output = new FileOutputStream(outputFile);
+
+                byte data[] = new byte[4096];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    // allow canceling with back button
+                    if (isCancelled()) {
+                        input.close();
+                        return null;
+                    }
+                    total += count;
+                    // publishing the progress....
+                    if (fileLength > 0) // only if total length is known
+                        publishProgress((int) (total * 100 / fileLength));
+                    output.write(data, 0, count);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            } finally {
+                try {
+                    if (output != null)
+                        output.close();
+                    if (input != null)
+                        input.close();
+                } catch (IOException ignored) {
+                }
+
+                if (connection != null)
+                    connection.disconnect();
+
+            }
+
+            return outputFile;
+        }
+
     }
 
 }

@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.teamawesome.followme.util.LocationBroadcasterService;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,10 +92,12 @@ public class StatusFragment extends Fragment {
         {
             mBroadcastImage.setImageResource(R.drawable.broadcast_active);
             createNotification();
+            getActivity().startService(new Intent(getActivity(), LocationBroadcasterService.class));
 
         }
         else{
             mBroadcastImage.setImageResource(R.drawable.broadcast_deactive);
+            getActivity().stopService(new Intent(getActivity(), LocationBroadcasterService.class));
 
         }
     }
