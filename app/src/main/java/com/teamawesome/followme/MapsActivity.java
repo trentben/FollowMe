@@ -116,6 +116,8 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         if(mCompassFragment == null)
             mCompassFragment = CompassFragment.newInstance();
 
+        mCompassFragment.setFriend(mFriend);
+
         getSupportFragmentManager().beginTransaction().replace(R.id.map_container, mCompassFragment).commit();
         mCompassFragment.setLocationSource(this);
     }

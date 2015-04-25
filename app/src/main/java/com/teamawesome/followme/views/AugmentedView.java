@@ -16,7 +16,7 @@ import android.view.SurfaceView;
  */
 public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback{
 
-    private static final int DEG_WIDTH = 70;
+    private static final int DEG_WIDTH = 45;
 
     private Context mContext;
     private SurfaceHolder mHolder;
@@ -97,7 +97,7 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
 
         int x = (int)(360 - mCompassBarring + 0 + (DEG_WIDTH/2)) % 360;
 
-        
+
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         canvas.drawCircle(x*degX, h/2, 40f, mRedPaint);
 

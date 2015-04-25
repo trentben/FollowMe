@@ -18,7 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Locale;
+import java.util.Scanner;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -44,6 +47,18 @@ public class HomeActivity extends ActionBarActivity {
         setContentView(R.layout.activity_home);
 
         final ActionBar actionBar = getSupportActionBar();
+
+        //Get Username
+        String userName = "";
+        try {
+            InputStream userNameFile = openFileInput(LoginActivity.USER_FILE);
+            Scanner input = new Scanner(userNameFile);
+            userName = input.nextLine();
+            actionBar.setTitle(userName);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

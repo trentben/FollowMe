@@ -19,7 +19,7 @@ import java.util.List;
 public class FriendsAdapter extends ArrayAdapter<Friend> {
     private Context mContext;
     private int mLayoutResId;
-    private List mList;
+    private List<Friend> mList;
 
     public FriendsAdapter(Context context, int resource, List<Friend> objects) {
         super(context, resource, objects);
@@ -56,7 +56,7 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
             holder = (Holder) row.getTag();
         }
 
-        holder.name.setText(mList.get(position).toString());
+        holder.name.setText(mList.get(position).username);
 
         return row;
     }

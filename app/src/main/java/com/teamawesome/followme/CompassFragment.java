@@ -160,8 +160,11 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
         float degress = event.values[0];
         float destBaring = 0;
 
-        if(mUserLocation != null)
+        if(mUserLocation != null && mFriend != null)
         {
+            mDestLocation = new Location("");
+            mDestLocation.setLatitude(mFriend.latitude);
+            mDestLocation.setLongitude(mFriend.longitude);
             int dist = (int) mUserLocation.distanceTo(mDestLocation);
             destBaring = mUserLocation.bearingTo(mDestLocation);
             mMetersTV.setText(dist+" m");
