@@ -31,7 +31,6 @@ public class StatusFragment extends Fragment {
 
     private ImageView mBroadcastImage;
     private Button mBroadcastBtn;
-    private boolean isBroadcasting;
 
     /**
      * Use this factory method to create a new instance of
@@ -73,7 +72,10 @@ public class StatusFragment extends Fragment {
             }
         });
 
-        isBroadcasting = false;
+        if(LocationBroadcasterService.isBroadcasting())
+        {
+            mBroadcastImage.setImageResource(R.drawable.broadcast_active);
+        }
 
         return view;
     }
@@ -86,9 +88,8 @@ public class StatusFragment extends Fragment {
     }
 
     public void onBroadcastClicked(){
-        isBroadcasting = !isBroadcasting;
 
-        if(isBroadcasting)
+        if(!LocationBroadcasterService.isBroadcasting())
         {
             mBroadcastImage.setImageResource(R.drawable.broadcast_active);
             getActivity().startService(new Intent(getActivity(), LocationBroadcasterService.class));

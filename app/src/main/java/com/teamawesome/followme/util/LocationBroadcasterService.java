@@ -9,6 +9,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -17,10 +18,16 @@ import android.util.Log;
 import com.teamawesome.followme.HomeActivity;
 import com.teamawesome.followme.R;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Created by Trent on 4/25/15.
  */
 public class LocationBroadcasterService extends Service implements LocationListener {
+    private static boolean isBroadcasting = false;
     private static final int NOTIFICATION_ID = 151;
     static LocationManager mLocationManager;
 
@@ -43,12 +50,15 @@ public class LocationBroadcasterService extends Service implements LocationListe
 
         createNotification();
 
+        isBroadcasting = true;
 
     }
 
 
     public void broadcastLocation(Location location) {
         Log.d("BROADCAST_SERVICE", "Lat:"+location.getLatitude()+" Long:"+location.getLongitude());
+        PostLocationTask postLocationTask = new PostLocationTask();
+        postLocationTask.execute("http://192.168.1.124:8888/sample1/updatelocation.php?json={%22UserName%22:%22Me!!%22,%20%22Latitude%22:" + location.getLatitude() +",%20%22Longitude%22:" +location.getLongitude()+"}");
     }
 
     public void createNotification() {
@@ -98,11 +108,44 @@ public class LocationBroadcasterService extends Service implements LocationListe
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isBroadcasting = false;
         mLocationManager.removeUpdates(this);
 
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(
                 Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(NOTIFICATION_ID);
         Log.d("BROADCAST_SERVICE", "Service destroyed");
+    }
+
+    public static boolean isBroadcasting(){
+        return isBroadcasting;
+    }
+
+    private class PostLocationTask extends AsyncTask<String, Integer, String> {
+
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String sUrl = urls[0];
+
+            HttpURLConnection connection = null;
+            URL url = null;
+            try {
+                url = new URL(sUrl);
+                connection = (HttpURLConnection) url.openConnection();
+
+                //Set the connection timeout to 5 sec
+                connection.setConnectTimeout(5000);
+                connection.connect();
+                connection.getInputStream();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
     }
 }
