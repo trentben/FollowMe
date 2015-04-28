@@ -18,7 +18,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -213,7 +212,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
 
 
         //Place a Marker where Friend is
-        mMap.addMarker(new MarkerOptions().position(new LatLng(mFriend.latitude, mFriend.longitude)));
+        mMap.addMarker(new MarkerOptions().title(mFriend.username).position(new LatLng(mFriend.latitude, mFriend.longitude)));
     }
 
     public void showFragment(String showFragment){
@@ -245,12 +244,12 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
              if(mMap!=null) {
                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 14.0f));
                 LatLng friend = new LatLng(mFriend.latitude, mFriend.longitude);
+
+                         //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                  mMap.addMarker(new MarkerOptions()
                          .title(mFriend.username)
 
-                         .position(friend)
-                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
+                         .position(friend));
 
              }
 
