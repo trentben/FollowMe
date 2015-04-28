@@ -20,6 +20,7 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.teamawesome.followme.util.Friend;
 
@@ -190,6 +191,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+
             }
         }
     }
@@ -208,11 +210,15 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
         }
 
-
-
+        //another attempt at marker
+        Marker marker = mMap.addMarker(new MarkerOptions()
+            .position( new LatLng(mFriend.latitude, mFriend.longitude))
+            .title(mFriend.username)
+        );
+        marker.showInfoWindow();
 
         //Place a Marker where Friend is
-        mMap.addMarker(new MarkerOptions().title(mFriend.username).position(new LatLng(mFriend.latitude, mFriend.longitude)));
+        mMap.addMarker(new MarkerOptions().title(mFriend.username).position(new LatLng(32.7767, 96.7970)));
     }
 
     public void showFragment(String showFragment){
@@ -242,14 +248,17 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
        }
        // my code to automatically set map to be in Dallas
              if(mMap!=null) {
-               mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 14.0f));
-                LatLng friend = new LatLng(mFriend.latitude, mFriend.longitude);
+               mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 17.0f));
 
-                         //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+              /*  LatLng friend = new LatLng(mFriend.latitude, mFriend.longitude);
+
+
                  mMap.addMarker(new MarkerOptions()
                          .title(mFriend.username)
 
-                         .position(friend));
+                         .position(friend)
+                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
 
              }
 
