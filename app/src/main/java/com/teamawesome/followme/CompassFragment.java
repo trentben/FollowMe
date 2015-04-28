@@ -48,7 +48,7 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
     private SensorManager mSensorManager;
     private Location mDestLocation;
     private Location mUserLocation;
-    private Friend mFriend;
+    private MapsActivity mParent;
 
     private OnFragmentInteractionListener mListener;
 
@@ -99,6 +99,11 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
         return view;
     }
 
+    public void setMapsActivitySource(MapsActivity parent){
+        mParent = parent;
+    }
+
+
     @Override
     public void onResume()
     {
@@ -117,9 +122,6 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
         mSensorManager.unregisterListener(this);
     }
 
-    public void setFriend(Friend friend){
-        mFriend = friend;
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -160,18 +162,20 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
         float degress = event.values[0];
         float destBaring = 0;
 
-        if(mUserLocation != null && mFriend != null)
+        if(mUserLocation != null && mParent != null)
         {
             mDestLocation = new Location("");
-            mDestLocation.setLatitude(mFriend.latitude);
-            mDestLocation.setLongitude(mFriend.longitude);
+            mDestLocation.setLatitude(mParent.mFriend.latitude);
+            mDestLocation.setLongitude(mParent.mFriend.longitude);
             int dist = (int) mUserLocation.distanceTo(mDestLocation);
             destBaring = mUserLocation.bearingTo(mDestLocation);
             mMetersTV.setText(dist+" m");
+            mCompassTV.setText(""+mParent.mFriend.latitude + ", " + mParent.mFriend.longitude);
+
         }
 
 
-        mCompassTV.setText(""+(int)degress);
+        //mCompassTV.setText(""+(int)degress);
         mCompassImage.setRotation(360-degress + destBaring);
 
 
