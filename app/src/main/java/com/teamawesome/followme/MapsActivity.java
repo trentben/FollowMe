@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -245,9 +246,15 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
        // my code to automatically set map to be in Dallas
              if(mMap!=null) {
                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 14.0f));
+                LatLng friend = new LatLng(mFriend.latitude, mFriend.longitude);
+                 mMap.addMarker(new MarkerOptions()
+                         .title("")
+                         
+                         .position(friend)
+                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
 
-         }
+             }
 
    }
 
