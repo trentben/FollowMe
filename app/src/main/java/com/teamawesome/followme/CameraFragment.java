@@ -37,6 +37,7 @@ public class CameraFragment extends Fragment implements SensorEventListener, Aug
     private Location mUserLocation, mDestLocation;
     private AugmentedView mAugmentedView;
     private float mCompassDegress;
+    private MapsActivity mParent;
 
     // TODO: Rename and change types and number of parameters
     public static CameraFragment newInstance() {
@@ -63,6 +64,8 @@ public class CameraFragment extends Fragment implements SensorEventListener, Aug
         safeCameraOpenInView(view);
         mAugmentedView = (AugmentedView) view.findViewById(R.id.augmented_view);
         mAugmentedView.setCompassSource(this);
+        mAugmentedView.setMapsActivitySource(mParent);
+        mParent.activate(mAugmentedView);
 
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 
@@ -89,6 +92,11 @@ public class CameraFragment extends Fragment implements SensorEventListener, Aug
         mSensorManager.unregisterListener(this);
     }
 
+    public void setMapsActivitySource(MapsActivity parent){
+        mParent = parent;
+
+    }
+    
     /**
      * Recommended "safe" way to open the camera.
      * @param view
@@ -145,14 +153,6 @@ public class CameraFragment extends Fragment implements SensorEventListener, Aug
     @Override
     public void onSensorChanged(SensorEvent event) {
         float degress = event.values[0];
-        float destBaring = 0;
-
-        if(mUserLocation != null)
-        {
-            int dist = (int) mUserLocation.distanceTo(mDestLocation);
-            destBaring = mUserLocation.bearingTo(mDestLocation);
-        }
-
 
         mCompassDegress = degress;
 

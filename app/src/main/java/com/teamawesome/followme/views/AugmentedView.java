@@ -6,15 +6,22 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.google.android.gms.maps.LocationSource;
+import com.teamawesome.followme.MapsActivity;
+
 /**
  * Created by Trent on 4/21/15.
  */
-public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback{
+public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback, LocationSource.OnLocationChangedListener{
 
     private static final int DEG_WIDTH = 45;
 
@@ -24,6 +31,8 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
     private Paint mRedPaint;
     private float mCompassBarring;
     private MyThread mThread;
+    private MapsActivity mParent;
+    private Location mUserLocation, mDestLocation;
 
     public AugmentedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,6 +48,10 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
         mRedPaint = new Paint();
         mRedPaint.setColor(Color.RED);
 
+    }
+
+    public void setMapsActivitySource(MapsActivity parent){
+        mParent = parent;
     }
 
     @Override
@@ -95,13 +108,37 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
 
         int degX = w/DEG_WIDTH;
 
-        int x = (int)(360 - mCompassBarring + 0 + (DEG_WIDTH/2)) % 360;
+        float destBaring = 0;
+
+        if(mUserLocation == null)
+        {
+            LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            mUserLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+
+        if(mUserLocation != null && mParent != null)
+        {
+            mDestLocation = new Location("");
+            mDestLocation.setLatitude(mParent.mFriend.latitude);
+            mDestLocation.setLongitude(mParent.mFriend.longitude);
+            int dist = (int) mUserLocation.distanceTo(mDestLocation);
+            destBaring = mUserLocation.bearingTo(mDestLocation);
+
+        }
+
+        int x = (int)(360 - mCompassBarring + destBaring + (DEG_WIDTH/2)) % 360;
 
 
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         canvas.drawCircle(x*degX, h/2, 40f, mRedPaint);
 
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mUserLocation = location;
+    }
+
 
     class MyThread extends Thread
 

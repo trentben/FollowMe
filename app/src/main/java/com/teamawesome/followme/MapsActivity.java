@@ -47,7 +47,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private static final String CAMERA_FRAGMENT_TAG = "camera";
     private static final String SAVED_FRAGMENT_STATE = "saved frag state";
     private static final Double DEFAULT_LAT = 32.7767;
-    private static final Double DEFAULT_LONG = 96.7970;
+    private static final Double DEFAULT_LONG = -96.7970;
 
     private String mCurrentFragment;
     private GoogleMap mMap;
@@ -55,13 +55,10 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private CompassFragment mCompassFragment;
     private CameraFragment mCameraFragment;
     private LocationManager mLocationManager;
-    OnLocationChangedListener myLocationListener = null;
-    Friend mFriend;
+    public OnLocationChangedListener myLocationListener = null;
+    public Friend mFriend;
     private LatLng mUserLocation;
     private FriendLocationUpdaterTask mFriendLocationUpdaterTask;
-
-
-    private int tempFix = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +149,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         if(mCameraFragment == null)
             mCameraFragment = CameraFragment.newInstance();
 
+        mCameraFragment.setMapsActivitySource(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.map_container, mCameraFragment).commit();
         //mCameraFragment.setLocationSource(this);
     }

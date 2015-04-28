@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -161,6 +162,12 @@ public class CompassFragment extends Fragment implements SensorEventListener, Lo
     public void onSensorChanged(SensorEvent event) {
         float degress = event.values[0];
         float destBaring = 0;
+
+        if(mUserLocation == null)
+        {
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            mUserLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
 
         if(mUserLocation != null && mParent != null)
         {
