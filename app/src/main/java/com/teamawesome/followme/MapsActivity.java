@@ -246,8 +246,8 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 14.0f));
                 LatLng friend = new LatLng(mFriend.latitude, mFriend.longitude);
                  mMap.addMarker(new MarkerOptions()
-                         .title("")
-                         
+                         .title(mFriend.username)
+
                          .position(friend)
                          .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
