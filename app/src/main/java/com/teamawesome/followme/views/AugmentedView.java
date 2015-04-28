@@ -22,6 +22,7 @@ import com.teamawesome.followme.MapsActivity;
 
 /**
  * Created by Trent on 4/21/15.
+ * this view show an augmented compass
  */
 public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback, LocationSource.OnLocationChangedListener{
 

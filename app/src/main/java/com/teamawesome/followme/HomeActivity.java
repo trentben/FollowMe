@@ -23,6 +23,11 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * Created by Trent and Alex
+ * The HomeActivity displays two tabs. One for viewing ones friends and the other for view the users
+ * location broadcating status
+ */
 
 public class HomeActivity extends ActionBarActivity {
 

@@ -28,7 +28,8 @@ import java.net.URL;
 import java.util.Scanner;
 
 /**
- * Created by Trent on 4/25/15.
+ * Created by Trent and Alex on 4/25/15.
+ * This Service broadcast the users location information to a Server
  */
 public class LocationBroadcasterService extends Service implements LocationListener {
     private static boolean isBroadcasting = false;

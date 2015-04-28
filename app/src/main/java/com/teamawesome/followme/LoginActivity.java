@@ -1,3 +1,9 @@
+/**
+ * LoginActivity
+ * Created by Trent and Alex
+ * This activity will only display on launch if a user has not logged in before.
+ */
+
 package com.teamawesome.followme;
 
 import android.content.Context;

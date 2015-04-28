@@ -1,3 +1,9 @@
+/**
+ * MapsActivity
+ * created by Trent and Alex
+ * This activity is responsible for showing the user a map with their location and there friends
+ * location. It also allows the user to switch to a compass or camera mode.
+ */
 package com.teamawesome.followme;
 
 import android.content.Context;
@@ -13,7 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.LocationSource;

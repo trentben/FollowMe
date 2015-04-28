@@ -39,10 +39,10 @@ import java.util.Scanner;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FriendsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * Created by Trent and Alex
+ *
+ * This fragment displays a users friends in a listview.
+ *
  * Use the {@link FriendsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
