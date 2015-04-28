@@ -34,7 +34,6 @@ public class CameraFragment extends Fragment implements SensorEventListener, Aug
     // Reference to the containing view.
     private View mCameraView;
     private SensorManager mSensorManager;
-    private Location mUserLocation, mDestLocation;
     private AugmentedView mAugmentedView;
     private float mCompassDegress;
     private MapsActivity mParent;

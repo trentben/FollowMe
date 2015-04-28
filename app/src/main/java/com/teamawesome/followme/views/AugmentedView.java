@@ -1,6 +1,7 @@
 package com.teamawesome.followme.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -33,6 +35,7 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
     private MyThread mThread;
     private MapsActivity mParent;
     private Location mUserLocation, mDestLocation;
+    private float mDotSize;
 
     public AugmentedView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,8 +48,17 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
         mHolder.addCallback(this);
         mHolder.setFormat(PixelFormat.TRANSPARENT);
 
+        Resources r = getResources();
+        mDotSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, r.getDisplayMetrics());
+        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, r.getDisplayMetrics());
+
         mRedPaint = new Paint();
         mRedPaint.setColor(Color.RED);
+        mRedPaint.setTextSize(textSize);
+        mRedPaint.setTextAlign(Paint.Align.CENTER);
+
+
+
 
     }
 
@@ -124,13 +136,15 @@ public class AugmentedView extends SurfaceView implements SurfaceHolder.Callback
             int dist = (int) mUserLocation.distanceTo(mDestLocation);
             destBaring = mUserLocation.bearingTo(mDestLocation);
 
+            int x = (int)(360 - mCompassBarring + destBaring + (DEG_WIDTH/2)) % 360;
+
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            canvas.drawCircle(x*degX, h/2, mDotSize, mRedPaint);
+
+            canvas.drawText(dist + " m", x*degX, h/2 + (mDotSize*3), mRedPaint);
         }
 
-        int x = (int)(360 - mCompassBarring + destBaring + (DEG_WIDTH/2)) % 360;
 
-
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        canvas.drawCircle(x*degX, h/2, 40f, mRedPaint);
 
     }
 
