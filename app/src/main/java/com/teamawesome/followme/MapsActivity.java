@@ -240,7 +240,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
            // my code to automatically set map to be in Dallas
           /*   if(mMap!=null) {
                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(32.7767, 96.7970), 14.0f));
-
+                blllahahahahahahah
 
          }*/
        }
