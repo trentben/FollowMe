@@ -19,4 +19,14 @@ public class Friend implements Serializable{
         longitude = longi;
     }
 
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Friend){
+            Friend f = (Friend) o;
+            return f.username.equals(username);
+        }
+        return false;
+    }
+
+
 }
