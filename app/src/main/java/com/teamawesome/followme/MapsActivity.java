@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -59,6 +60,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     public Friend mFriend;
     private LatLng mUserLocation;
     private FriendLocationUpdaterTask mFriendLocationUpdaterTask;
+    private Marker mFriendMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,15 +212,6 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
         }
 
-        //another attempt at marker
-        Marker marker = mMap.addMarker(new MarkerOptions()
-            .position( new LatLng(mFriend.latitude, mFriend.longitude))
-            .title(mFriend.username)
-        );
-        marker.showInfoWindow();
-
-        //Place a Marker where Friend is
-        mMap.addMarker(new MarkerOptions().title(mFriend.username).position(new LatLng(32.7767, 96.7970)));
     }
 
     public void showFragment(String showFragment){
@@ -241,24 +234,38 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
      */
    @Override
     public void onLocationChanged(Location location) {
+
        if (myLocationListener != null) {
 
            myLocationListener.onLocationChanged(location);
 
        }
+
+       if (mMap == null && mMapFragment != null) {
+           // Try to obtain the map from the SupportMapFragment.
+           mMap = mMapFragment.getMap();
+           // Check if we were successful in obtaining the map.
+           if (mMap != null) {
+               setUpMap();
+
+           }
+       }
+
        // my code to automatically set map to be in Dallas
              if(mMap!=null) {
-               mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 17.0f));
 
+                LatLng friend = new LatLng(mFriend.latitude, mFriend.longitude);
 
-              /*  LatLng friend = new LatLng(mFriend.latitude, mFriend.longitude);
+                 if(mFriendMarker != null)
+                 {
+                     mFriendMarker.remove();
+                 }
 
-
-                 mMap.addMarker(new MarkerOptions()
+                 mFriendMarker = mMap.addMarker(new MarkerOptions()
                          .title(mFriend.username)
 
                          .position(friend)
-                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
+                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
              }
 
