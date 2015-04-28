@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.LocationSource;
@@ -153,6 +152,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
         }
 
         setUpMapIfNeeded();
+
     }
 
 
@@ -169,7 +169,9 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             }
         }
     }
+
     private void setUpMap() {
+
         mMap.setMyLocationEnabled(true);
         mMap.setLocationSource(this);
 
@@ -181,6 +183,9 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
             mUserLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
             //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 15));
         }
+
+
+
 
         //Place a Marker where Friend is
         mMap.addMarker(new MarkerOptions().position(new LatLng(mFriend.latitude, mFriend.longitude)));
@@ -207,9 +212,18 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
    @Override
     public void onLocationChanged(Location location) {
        if (myLocationListener != null) {
+
            myLocationListener.onLocationChanged(location);
+           // my code to automatically set map to be in Dallas
+          /*   if(mMap!=null) {
+               mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(32.7767, 96.7970), 14.0f));
+
+
+         }*/
        }
-    }
+
+
+   }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
