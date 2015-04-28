@@ -41,7 +41,7 @@ public class LoginActivity extends ActionBarActivity {
 
         try {
             outputStream = openFileOutput(USER_FILE, Context.MODE_PRIVATE);
-            outputStream.write(mUserNameEdit.getText().toString().getBytes());
+            outputStream.write(mUserNameEdit.getText().toString().trim().getBytes());
             outputStream.close();
 
             Intent intent = new Intent(this, HomeActivity.class);

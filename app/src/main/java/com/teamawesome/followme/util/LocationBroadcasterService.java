@@ -16,12 +16,16 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.teamawesome.followme.HomeActivity;
+import com.teamawesome.followme.LoginActivity;
 import com.teamawesome.followme.R;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
 /**
  * Created by Trent on 4/25/15.
@@ -31,9 +35,22 @@ public class LocationBroadcasterService extends Service implements LocationListe
     private static final int NOTIFICATION_ID = 151;
     static LocationManager mLocationManager;
 
+    private String mUsername;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Get Username
+
+        try {
+            InputStream userNameFile = openFileInput(LoginActivity.USER_FILE);
+            Scanner input = new Scanner(userNameFile);
+            mUsername = input.nextLine();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         final Criteria criteria = new Criteria();
 
@@ -58,7 +75,7 @@ public class LocationBroadcasterService extends Service implements LocationListe
     public void broadcastLocation(Location location) {
         Log.d("BROADCAST_SERVICE", "Lat:"+location.getLatitude()+" Long:"+location.getLongitude());
         PostLocationTask postLocationTask = new PostLocationTask();
-        postLocationTask.execute("http://192.168.1.124:8888/sample1/updatelocation.php?json={%22UserName%22:%22Me!!%22,%20%22Latitude%22:" + location.getLatitude() +",%20%22Longitude%22:" +location.getLongitude()+"}");
+        postLocationTask.execute("http://followme.byethost31.com/updatelocation.php?json={%22UserName%22:%22"+mUsername+"%22,%20%22Latitude%22:" + location.getLatitude() +",%20%22Longitude%22:" +location.getLongitude()+"}");
     }
 
     public void createNotification() {
@@ -135,6 +152,13 @@ public class LocationBroadcasterService extends Service implements LocationListe
                 connection = (HttpURLConnection) url.openConnection();
 
                 //Set the connection timeout to 5 sec
+                connection.setRequestProperty("accept", "*/*");
+                connection.setRequestProperty("connection", "close");
+                connection.setRequestProperty("user-agent",
+                        "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+
                 connection.setConnectTimeout(5000);
                 connection.connect();
                 connection.getInputStream();

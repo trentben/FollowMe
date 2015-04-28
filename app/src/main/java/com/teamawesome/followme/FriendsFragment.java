@@ -119,7 +119,7 @@ public class FriendsFragment extends Fragment {
         });
 
         DownloadFriendsData downloadFriendsData = new DownloadFriendsData(getActivity());
-        downloadFriendsData.execute("http://192.168.1.124:8888/sample1/getusers.php?user=1&format=json");
+        downloadFriendsData.execute("http://followme.byethost31.com/getusers.php?user=1&format=json");
 
         return view;
     }
