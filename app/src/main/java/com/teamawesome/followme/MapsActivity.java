@@ -20,7 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.teamawesome.followme.adapters.FriendsAdapter;
 import com.teamawesome.followme.util.Friend;
 
 import org.json.JSONArray;
