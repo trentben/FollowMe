@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.LocationSource;
@@ -44,6 +45,8 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
     private static final String COMPASS_FRAGMENT_TAG = "compass";
     private static final String CAMERA_FRAGMENT_TAG = "camera";
     private static final String SAVED_FRAGMENT_STATE = "saved frag state";
+    private static final Double DEFAULT_LAT = 32.7767;
+    private static final Double DEFAULT_LONG = 96.7970;
 
     private String mCurrentFragment;
     private GoogleMap mMap;
@@ -154,7 +157,7 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
 
     public void showMapFragment(){
         // Creates initial configuration for the map
-        GoogleMapOptions options = new GoogleMapOptions().camera(CameraPosition.fromLatLngZoom(new LatLng(37.4005502611301, -5.98233461380005), 16))
+        GoogleMapOptions options = new GoogleMapOptions().camera(CameraPosition.fromLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 16))
                 .compassEnabled(false).mapType(GoogleMap.MAP_TYPE_NORMAL).rotateGesturesEnabled(true).scrollGesturesEnabled(true).tiltGesturesEnabled(false)
                 .zoomControlsEnabled(true).zoomGesturesEnabled(true);
 
@@ -237,14 +240,14 @@ public class MapsActivity extends ActionBarActivity implements LocationListener,
        if (myLocationListener != null) {
 
            myLocationListener.onLocationChanged(location);
-           // my code to automatically set map to be in Dallas
-          /*   if(mMap!=null) {
-               mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(32.7767, 96.7970), 14.0f));
-                blllahahahahahahah
 
-         }*/
        }
+       // my code to automatically set map to be in Dallas
+             if(mMap!=null) {
+               mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), 14.0f));
 
+
+         }
 
    }
 
